@@ -1,3 +1,2 @@
 const meineVariable = "hello";
-
-console.log(meineVariable); 
+console.log(meineVariable);

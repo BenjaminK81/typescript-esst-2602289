@@ -1,0 +1,7 @@
+{
+    "compilerOptions": {
+      "target": "ESNext", // ESNext heißt, dass die neueste JS-Version genutzt wird
+      "module": "ESNext"
+    },
+    "include": ["demo.ts"] // **/*.datei ist ein GLOB-Pattern, der alle Ordner mit einbezieht
+  }

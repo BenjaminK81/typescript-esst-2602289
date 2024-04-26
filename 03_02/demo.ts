@@ -1,13 +1,19 @@
 export function Demo() {
-  let myString: string = "Hallo";
+  let myString: string = "Hallo"; // Typ-Zuordnung durch : string
   let myNumber: number = 123;
   let myBoolean: boolean = true;
 
-  let myUndefined: string;
-  myUndefined = "test";
-  // myUndefined = true;
-  // myUndefined = 2;
+  let anyThings; // Hier legen wir fest, dass anyThings alles sein kann, also ANY
+  anyThings = true;
+  anyThings = 1;
+  anyThings = "Hallo";
 
-  let myNull: boolean = null;
+  let myUndefined: string; // Legen wir vorher den Typ fest, dann sind alle werte außer string ungültig
+  myUndefined = "test";
+  myUndefined = true;
+  myUndefined = 2;
+
+  let myNull: boolean = null; // Fehler da NULL kein boolean -> entweder ohne wert (let myNull: boolean;) oder Mehrfachzuordnung
+  let withNull: boolean | null = null; // Mehrfachzuordnung
   myNull = false;
 }

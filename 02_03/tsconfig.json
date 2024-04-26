@@ -1,8 +1,9 @@
 {
   "compilerOptions": {
-    "target": "ES3",
-    "module": "CommonJS",
-    "skipLibCheck": true
+    "target": "ES3", // kompiliert in altes JS -> es kommt zur Fehlermeldung
+    "module": "CommonJS", //
+    "skipLibCheck": true // verhindert Fehlermeldung, indem im node_modules nicht nach ES3 gesucht wird
   },
-  "include": ["demo.ts"]
+  "include": ["**/*.ts"], // kompiliert alle Dateien Ordnerübergreifend
+  "exclude": ["michnicht.ts"] // bis auf exclude-Dateien
 }
