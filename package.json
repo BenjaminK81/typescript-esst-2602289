@@ -5,9 +5,11 @@
   "description": "Dies ist das Repository für den **LinkedIn Learning** Kurs `[COURSENAME]`. Den gesamten Kurs finden Sie auf [LinkedIn Learning][lil-course-url].",
   "main": "index.js",
   "dependencies": {
-    "moo": "^0.5.2"
+    "moo": "^0.5.2",
+    "vite": "^5.2.10"
   },
   "scripts": {
+    "dev": "vite",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
