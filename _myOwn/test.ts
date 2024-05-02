@@ -2,6 +2,7 @@
 const zahl: number = 2;
 const bol: boolean = true;
 const text: string = "dfbf";
+const alles: any = "kann alles sein!" + 23 + "z. B. oder " + false + "oder" + {} + "Object";
 
 // gemischte Typen
 let gemischt;
@@ -64,7 +65,7 @@ export function challenge() {
 // Objects
 export function objDemo() {
 
-  // Objekt einem Typ zugewiesen
+  // Objekt einem Typ zugewiesen (explizit)
   let person1: { author: string } = { author: "Max Mustermann" };
 
   // lesbarer wird es durch eigene Typen
@@ -112,11 +113,12 @@ export function objDemo() {
 
 }
 
+
 // Functions and Callbacks
 export function functionDemo() {
 
-  // expliziter Typ als Funtion erstellt (void gibt nichts zurück)
-  const myFunction1: () => void = () => { return "Hallo Funktion 1" };
+  // expliziter Typ als Funtion erstellt (void = kein Rückgabewert)
+  const myFunction1: () => void = () => { };
   let myF1 = myFunction1();
 
   // hier nicht als expliziter Typ, sonder in lesbare Form
@@ -133,3 +135,68 @@ export function functionDemo() {
   console.log(myF4("Mein Parameter", 10));
 
 }
+
+
+// function callback NEVER
+export function neverFunction() {
+
+  // NEVER sorgt dafür das es zu keiner Ausgabe kommt 
+  // und diese nie gelesen wird (evtl. sogar ABBRUCH an der Stelle)
+  // void gibt mindestens ein undefined zurück
+  type neverFunc = () => never;
+
+  let nevFunc1: neverFunc = () => {
+    console.log("ERROR");
+    throw new Error("");
+  }
+  const nevF1 = nevFunc1();
+}
+
+
+// function callback UNKNOWN
+export function unknownFunction() {
+  let anyTing: any = { user: "Dummie" }; // any nimmt einfach alles entgegen, auch wenn falsch
+  let anyThing2: unknown = { user: "achim" };
+
+  let myString: string;
+  myString = anyTing; // hier akzteptiert Type STRING einfach der Object AnyThing
+  //myString = anyThing2; // UNKNOWN kann alle Typen enthalten, kann sich aber nicht überschneiden, außer mit Typen in UNKNOWN
+}
+// UNKNWON gewährleistet Typensicherheit bei unbekannten Werten,
+// die irgendwo empfangen werden
+// im besten Fall, weiß man aber, welche Werte empfangen werden
+// und benutzt weder ANY noch UNKNOWN
+
+
+// ENUM
+export function enumFunction() {
+
+  // Typisierung erfolgt als Objekt (hier nur Beispiel); verhält sich wie ein Array
+  // Beispiel ist ein Key-Enum und beginnt bei 0
+  // festgelegte Enums sind unveränderlich und können nicht manipuliert werden
+  enum enumVar {
+    ENUM_BEISPIEL_1,  // erster Wert 0 zugewiesen
+    ENUM_BEISPIEL_42, // zweiter Wert 1 zugewiesen
+    ENUM_BEISPIEL_4,  // dritter Wert 2 zugewiesen
+  }
+
+  // Beispiel ist ein String-Enum
+  enum enumVar2 {
+    ENUM_BEISPIEL_1 = "Achim",  // erster Wert 0 zugewiesen
+    ENUM_BEISPIEL_42 = "Hans", // zweiter Wert 1 zugewiesen
+    ENUM_BEISPIEL_4 = "Katrin",  // dritter Wert 2 zugewiesen
+  }
+
+  // Beispiel ist ein Key-Enum beginnt aber mit Key 5
+  enum enumVar3 {
+    ENUM_BEISPIEL_1 = 5,  // erster Wert 0 zugewiesen
+    ENUM_BEISPIEL_42, // zweiter Wert 1 zugewiesen
+    ENUM_BEISPIEL_4,  // dritter Wert 2 zugewiesen
+  }
+
+  const beispiele: enumVar = enumVar.ENUM_BEISPIEL_4;
+  console.log(enumVar3);
+
+}
+enumFunction();
+

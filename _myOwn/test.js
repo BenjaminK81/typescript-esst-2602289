@@ -2,6 +2,7 @@
 const zahl = 2;
 const bol = true;
 const text = "dfbf";
+const alles = "kann alles sein!" + 23 + "z. B. oder " + false + "oder" + {} + "Object";
 // gemischte Typen
 let gemischt;
 gemischt = text + zahl;
@@ -40,7 +41,7 @@ export function challenge() {
 }
 // Objects
 export function objDemo() {
-    // Objekt einem Typ zugewiesen
+    // Objekt einem Typ zugewiesen (explizit)
     let person1 = { author: "Max Mustermann" };
     let person2 = { author: "Susi Strolch" };
     let person3 = {
@@ -74,12 +75,44 @@ export function objDemo() {
 }
 // Functions and Callbacks
 export function functionDemo() {
-    // expliziter Typ als Funtion erstellt (void gibt nichts zurück)
-    const myFunction1 = () => { return "Hallo Funktion 1"; };
+    // expliziter Typ als Funtion erstellt (void = kein Rückgabewert)
+    const myFunction1 = () => { };
     let myF1 = myFunction1();
     let myF2 = () => { return "Moin Funktion 2"; };
     let myF3 = () => { return 34; };
     let myF4 = () => { return; };
     console.log(myF4("Mein Parameter", 10));
 }
-functionDemo();
+// function callback NEVER
+export function neverFunction() {
+    let nevFunc1 = () => {
+        console.log("ERROR");
+        throw new Error("");
+    };
+    const nevF1 = nevFunc1();
+}
+// function callback UNKNOWN
+export function unknownFunction() {
+    let anyTing = { user: "Dummie" }; // any nimmt einfach alles entgegen, auch wenn falsch
+    let anyThing2 = { user: "achim" };
+    let myString;
+    myString = anyTing; // hier akzteptiert Type STRING einfach der Object AnyThing
+    //myString = anyThing2; // UNKNOWN kann alle Typen enthalten, kann sich aber nicht überschneiden, außer mit Typen in UNKNOWN
+}
+// UNKNWON gewährleistet Typensicherheit bei unbekannten Werten,
+// die irgendwo empfangen werden
+// im besten Fall, weiß man aber, welche Werte empfangen werden
+// und benutzt weder ANY noch UNKNOWN
+// ENUM
+export function enumFunction() {
+    // Typisierung erfolgt als Objekt (hier nur Beispiel); verhält sich wie ein Array
+    let enumVar;
+    (function (enumVar) {
+        enumVar[enumVar["ENUM_BEISPIEL_1"] = 0] = "ENUM_BEISPIEL_1";
+        enumVar[enumVar["ENUM_BEISPIEL_42"] = 1] = "ENUM_BEISPIEL_42";
+        enumVar[enumVar["ENUM_BEISPIEL_4"] = 2] = "ENUM_BEISPIEL_4"; // dritter Wert 2 zugewiesen
+    })(enumVar || (enumVar = {}));
+    const beispiele = enumVar.ENUM_BEISPIEL_1;
+    console.log(beispiele);
+}
+enumFunction();

@@ -2,7 +2,8 @@
     "compilerOptions": {
         "target": "ESNext",
         "module": "ESNext",
-        "skipLibCheck": true,
     },
-    "include": ["**/*.ts"],
+    "include": [
+        "**/*.ts"
+    ],
 }
