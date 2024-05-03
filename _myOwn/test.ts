@@ -198,5 +198,84 @@ export function enumFunction() {
   console.log(enumVar3);
 
 }
-enumFunction();
 
+
+// TUPLES
+export function tuplesFunction() {
+  type StringNumberArray = (string | number)[];
+  let myArr: StringNumberArray = ["dfdfb", 45, "fdbdfb", 456];
+
+  // ein TUPLE definiert einen Typ (in dem Fall ein Array) mit korrekter Anzahl an zugelassenen Werten (hier nur 2 NUMBER Werte)
+  const xyTuple: [number, number] = [100, 400];
+
+  return "X ist: " + xyTuple[0] + " und Y ist: " + xyTuple[1];
+}
+
+
+// KLASSEN definieren wie in JS gewohnt
+class PersonJS {
+  static say = "Hi ";
+
+  nameKurz: string // Properties/Eigenschaft Kurzschreibweise in TypeScript
+  public nameNormalJS: string; // Properties/Eigenschaft wie in JS gewohnt
+
+  constructor(name: string) { // in TypeScript muss typensicherheit so definiert werden
+    this.nameKurz = name;
+  }
+}
+
+// KLASSEN definieren wie in TypeScript
+class PersonTS {
+
+  static say = "Hi "; // static string kann nur über die Klasse an sich aufgerufen werden = PersonTS.say
+
+  static sayMethod() { // static method kann außerhalb nur über die Klasse an sich aufgerufen werden = PersonTS.sayMethod()
+    return 1 + 2;
+  }
+
+  constructor(public name: string) { } // public property wird im constructor direkt angegeben und erwartet einen string (this. kann man weglassen!)
+}
+const newPerson = new PersonTS("");
+newPerson.name = "Franzi"; // hier propety aufruf und übergabe an Objekt .name
+
+export function classFunc() {
+  const person = new PersonTS("Achim");
+  return person.name;
+}
+
+// KLASSEN protected und private in TypeScript
+class PersonPR {
+  static say = "Hi ";
+
+  constructor(
+    public name: string,
+    protected age: number, // von außen nicht aufrufbar, nur innerhalb und an erweiterte Klassen (extends)
+    private id: string // von außen und erweiterte Klassen nicht aufrufbar!!! PRIVAT
+  ) { }
+
+  // innerhalb der Klasse erreichbar (Beispiel mit einer Methode "getPersonAge")
+  getPersonAge() {
+    return this.age;
+  }
+
+  // innerhalb der Klasse erreichbar (Beispiel mit einer Methode "getPersonAge")
+  getPersonId() {
+    return this.id;
+  }
+
+}
+
+class extendedPersonPR extends PersonPR {
+
+  // protected von PersonPR werden auch an abgeleitete Klassen (extends) weitergegeben
+  // private können selbst hier nicht aufgerufen werden = PRIVAT
+
+}
+
+export function prFunction() {
+
+  const pr1 = new extendedPersonPR("Micha", 42, "#p123")
+  console.log(pr1.name, pr1.getPersonAge(), pr1.getPersonId()); // Wert 2 und 3 durch Aufruf der Methode 
+
+}
+prFunction();
