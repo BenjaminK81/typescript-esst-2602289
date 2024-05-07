@@ -55,7 +55,7 @@ export function typeDemo() {
 export function challenge() {
 
   type myType = string | false | (string | number)[];
-  //type myType = string | false | Array<string | number>; // generische Schreibweise von Array
+  type myGenericType = string | false | Array<string | number>; // generische Schreibweise von Array
 
   let foo: myType = "Hello";
   foo = false;
@@ -131,7 +131,7 @@ export function functionDemo() {
 
   // Typensicherheit in der Funktion mit Typensicherheit in überg. Parameter
   type myFunction4 = (paramA: string, paramB: number) => void;
-  let myF4: myFunction4 = () => { return };
+  let myF4: myFunction4 = (par1, par2) => { return par1 + " " + par2 };
   console.log(myF4("Mein Parameter", 10));
 
 }
@@ -150,8 +150,9 @@ export function neverFunction() {
     throw new Error("");
   }
   const nevF1 = nevFunc1();
-}
+  console.log(nevF1);
 
+}
 
 // function callback UNKNOWN
 export function unknownFunction() {
@@ -159,8 +160,11 @@ export function unknownFunction() {
   let anyThing2: unknown = { user: "achim" };
 
   let myString: string;
-  myString = anyTing; // hier akzteptiert Type STRING einfach der Object AnyThing
-  //myString = anyThing2; // UNKNOWN kann alle Typen enthalten, kann sich aber nicht überschneiden, außer mit Typen in UNKNOWN
+  myString = anyTing; // hier akzteptiert Type STRING einfach das Object AnyThing
+  myString = anyThing2; // UNKNOWN kann alle Typen enthalten, kann sich aber nicht überschneiden, außer mit Typen in UNKNOWN
+
+  console.log(myString);
+
 }
 // UNKNWON gewährleistet Typensicherheit bei unbekannten Werten,
 // die irgendwo empfangen werden
@@ -235,6 +239,7 @@ class PersonTS {
 
   constructor(public name: string) { } // public property wird im constructor direkt angegeben und erwartet einen string (this. kann man weglassen!)
 }
+
 const newPerson = new PersonTS("");
 newPerson.name = "Franzi"; // hier propety aufruf und übergabe an Objekt .name
 
@@ -265,6 +270,7 @@ class PersonPR {
 
 }
 
+
 class extendedPersonPR extends PersonPR {
 
   // protected von PersonPR werden auch an abgeleitete Klassen (extends) weitergegeben
@@ -278,4 +284,97 @@ export function prFunction() {
   console.log(pr1.name, pr1.getPersonAge(), pr1.getPersonId()); // Wert 2 und 3 durch Aufruf der Methode 
 
 }
-prFunction();
+
+// public = von überall zugriff
+// protected = nur innerhalb der Klasse oder der erweiterten Klasse
+// privat = nur innerhalb der Klasse
+
+
+// INTERFACES
+// mit INTERFACES hinterlegt man eine Struktur bzw. Regeln für Klassen, wenn man z.B. in einem Team arbeitet
+// INTERFACES können weder protected noch private enthalten
+// INTERFACES können durch andere INTERFACES erweitert werden
+interface IBasePerson {
+  name: string;
+}
+interface IPerson extends IBasePerson {
+  sayHello: () => void; // Methode in Form einer Funktion
+}
+
+interface IAge {
+  age: number;
+}
+
+// Klassen können mehrere Interfaces besitzen
+class Person implements IPerson, IAge { // mehrere INTERFACES implementiert
+  constructor(
+    public name: string,
+    public age: number,
+    private id: number,
+  ) { }
+
+  sayHello() {
+    return "HAllo";
+  };
+}
+
+export function personDemo() {
+  const person = new Person("Fred", 42, 1283);
+
+  console.log(person);
+
+}
+
+
+// optionale TYPEN / PARTIALS
+type Restaurant = {
+  name: string;
+  location: string;
+  priceRange: "low" | "normal" | "high";
+  comment?: string; // Fragezeichen "?" hinter der Eigenschaft macht diese "OPTIONAL"
+}
+
+export function restDemo() {
+
+  const germanRest: Restaurant = {
+    name: "Zum Bären",
+    location: "Magdeburg",
+    priceRange: "normal",
+    comment: "Alter Schwede",
+  }
+
+  const thaiRest: Restaurant = { // hier "comment" optional weggelassen
+    name: "Mo",
+    location: "Hannover",
+    priceRange: "normal",
+  }
+
+  const italRest: Partial<Restaurant> = { // "PARTIAL" macht alle Eigenschaften "OPTIONAL"
+    name: "Giovanni",
+    foo: "bar", // es können aber keine neuen Eigenschaften hinzugefügt werden
+  }
+
+  console.log(thaiRest);
+
+}
+
+
+// TYPE GUARDING
+type SomeValueFunc = () => string | number | { name: string };
+
+const getSomeValue: SomeValueFunc = () => {
+  return { name: "HALLO" };
+}
+
+export function dynamicFunction() {
+
+  let value = getSomeValue(); // hier im "value" noch alle Rückgabewerte von der Funktion enthalten
+
+  // Type Guarding = dynamische Erkennung, durch If-Operator und typeof
+  if (typeof value !== 'number' && typeof value !== 'string') {
+    console.log(value); // hier nur noch object im "value" als Rückgabewert zugelassen
+  }
+
+
+}
+dynamicFunction();
