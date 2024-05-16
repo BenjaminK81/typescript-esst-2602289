@@ -370,11 +370,34 @@ export function dynamicFunction() {
 
   let value = getSomeValue(); // hier im "value" noch alle Rückgabewerte von der Funktion enthalten
 
-  // Type Guarding = dynamische Erkennung, durch If-Operator und typeof
+  // Type Guarding = dynamische Erkennung des Typs, durch If-Operator und typeof
   if (typeof value !== 'number' && typeof value !== 'string') {
-    console.log(value); // hier nur noch object im "value" als Rückgabewert zugelassen
+    console.log(value.name); // hier nur noch object im "value" als Rückgabewert zugelassen
+  }
+  // ODER MIT instanceof Typ
+  if (value instanceof Object) {
+    console.log(value);
   }
 
+  const myObject: { foobar?: { foo: boolean } } = {};
+  if (myObject.foobar) {
+    console.log(myObject.foobar.foo);
+  }
 
 }
-dynamicFunction();
+
+
+// Konstante erzwingen
+function getVarArr() {
+  return ["Text und so", 42] as const; // "as const" erzwingt die Konstante und somit die Regel/Struktur (hier Array mit 1 Wert string und 2 Wert number)
+}
+
+export function constFunction() {
+  let name: string;
+  let myNum: number;
+
+  const nameAndNumber = getVarArr();
+
+  name = nameAndNumber[0]; // 0 könnte auch Number sein (durch feste Struktur siehe "as const" gesichert)
+  myNum = nameAndNumber[1]; // 1 könnte auch String sein (durch feste Struktur siehe "as const" gesichert)
+}
