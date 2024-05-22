@@ -401,3 +401,82 @@ export function constFunction() {
   name = nameAndNumber[0]; // 0 könnte auch Number sein (durch feste Struktur siehe "as const" gesichert)
   myNum = nameAndNumber[1]; // 1 könnte auch String sein (durch feste Struktur siehe "as const" gesichert)
 }
+
+
+// Typen zusammenbinden
+interface PersonTypeBind { // Interface kann nicht nur für Klassen verwendet werden, sondern auch für Objekte!
+  name: string;
+}
+
+type AgeTypeBind = {
+  age: number;
+}
+
+export function TypeBindDemo() {
+
+  let unionObject: AgeTypeBind | PersonTypeBind = { // Das union object ist jetzt entweder "Age" oder "Person", jedoch nicht beides (nur 1 Eigenschaft)
+    age: 42,
+    name: "Ben"
+  }
+  // Hier Zugriff auf beide Eigenschaften nur über TypeGuarding
+  if ("age" in unionObject) {
+    console.log(unionObject.age);
+  }
+
+  if ("name" in unionObject) {
+    console.log(unionObject.name);
+  }
+
+  // Hier durch & (intersection) Zugriff auf beide Eigenschaften beider Typen
+  let intersectionObject: AgeTypeBind & PersonTypeBind = {
+    age: 42,
+    name: "Ben"
+  }
+
+  console.log(intersectionObject.name + " ist: " + intersectionObject.age);
+
+
+}
+
+
+// Template Literal Types (Text-Strukturen erzwingen)
+export function literalTypes() {
+
+  type VehicleType = `T_${"CAR" | "TRUCK" | "BUS"}_${number}`; // Struktur des Types wird im String erzwungen (wie Suchmethode)
+
+  // ODER übersichtlicher
+
+  type VehicleTypeNames = "CAR" | "TRUCK" | "BUS";
+  type VehicleTypeStructure = `T_${VehicleTypeNames}_${number}`;
+
+  let serialNumberCar: VehicleTypeStructure = "T_CAR_599"; // hier wird durch den Typ VehicleTypeStructure die Struktur überprüft
+  let serialNumberTruck: VehicleTypeStructure = "T_TRU_456"; // hier wird durch den Typ VehicleTypeStructure die Struktur überprüft (Fehler, da nicht der Typ TRUCK)
+  let serialNumberBus: VehicleTypeStructure = "T_BUS_234"; // hier wird durch den Typ VehicleTypeStructure die Struktur überprüft
+}
+
+// Challenge
+interface MyFunctionType {
+  (parA: number, parB?: string): void;
+}
+
+export function challengeFunc() {
+  const myTestFunction: MyFunctionType = (paramA, paramB) => {
+    console.log(paramA, paramB);
+  };
+
+  myTestFunction(100);
+  myTestFunction(100, "Foo!");
+}
+
+
+// Vorhandene Typen einschränken bzw. verkleinern
+type ERROR_CODES = "ERROR_1" | "ERROR_2" | "ERROR_4" | "ERROR_5"; // Beispiel eines vorhandenen Typen
+type ServerResponse = { // Beispiel eines vorhandenen Typen
+  html: string;
+  errorCodes: ERROR_CODES;
+  errorCodesExclude: Exclude<ERROR_CODES, "ERROR_5"> // Mit "Exclude" kann ich vorher def. Typen entfernen innerhalb eines Types
+}
+
+// Hier möchte ich vorhandene Typen einschränken
+type SuccessResponse = Omit<ServerResponse, 'errorCodes'>; // Hier wurde die Eigenschaft "errorCodes" aus ServerResponse mit "Omnit" entfernt
+type FailureResponse = Omit<ServerResponse, 'html'>; // Hier wurde die Eigenschaft "html" aus ServerResponse mit "Omnit" entfernt

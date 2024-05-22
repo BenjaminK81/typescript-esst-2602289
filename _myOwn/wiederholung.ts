@@ -56,7 +56,21 @@ export function typen() {
   }
 
 }
-typen();
+
+export function constFunc() {
+  return ["sdvsdv", 45, "dvdsv"] as const;
+}
+
+const arr = constFunc();
+
+let str: string;
+let num: number;
+
+str = arr[0];
+num = arr[1];
+
+
+
 
 
 
