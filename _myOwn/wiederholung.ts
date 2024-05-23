@@ -69,6 +69,74 @@ let num: number;
 str = arr[0];
 num = arr[1];
 
+interface myInt {
+  name: string;
+}
+
+type myType = {
+  num: number;
+  location?: string;
+}
+
+let combType: myInt | myType = {
+  name: "Benjamin",
+  num: 42
+}
+
+if ("num" in combType) {
+  //console.log(combType.num);
+}
+
+if ("name" in combType) {
+  //console.log(combType.name);
+}
+
+
+
+let comtIntercType: myInt & myType = {
+  name: "Sandra",
+  num: 40,
+  location: "Hannover"
+}
+
+console.log(comtIntercType.name + " ist: " + comtIntercType.num + " und wohnt in " + comtIntercType.location);
+
+
+interface myFunc {
+  (parA: string, parB?: number): void;
+}
+
+const useFunc: myFunc = (parA, parB) => {
+  console.log(parA, parB);
+
+}
+
+type valType1 = `ID_${number}`;
+type valType2 = "HUB_1" | "HUB_2" | "HUB_3";
+type valTypeComb = `${valType1}_${valType2}`;
+
+let myTypeComb: valTypeComb = "ID_123_HUB_2";
+
+console.log(myTypeComb);
+
+type fixedObj2 = "MALE" | "FEMALE" | "DIV";
+
+type fixedObj1 = {
+  id: number,
+  name: string,
+  sonst: Exclude<fixedObj2, "MALE">
+}
+
+type myObj = Omit<fixedObj1, "name">;
+
+let obj1: myObj = {
+  id: 234,
+  sonst: "FEMALE",
+}
+
+
+
+
 
 
 

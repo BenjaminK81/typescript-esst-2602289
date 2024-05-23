@@ -439,10 +439,10 @@ export function TypeBindDemo() {
 }
 
 
-// Template Literal Types (Text-Strukturen erzwingen)
+// Template Literal Types (Text-Strukturen erzwingen) - VALIDIERUNG
 export function literalTypes() {
 
-  type VehicleType = `T_${"CAR" | "TRUCK" | "BUS"}_${number}`; // Struktur des Types wird im String erzwungen (wie Suchmethode)
+  type VehicleType = `T_${"CAR" | "TRUCK" | "BUS"}_${number}`; // Struktur des Types wird im String erzwungen (wie VALIDIERUNG)
 
   // ODER übersichtlicher
 
@@ -480,3 +480,84 @@ type ServerResponse = { // Beispiel eines vorhandenen Typen
 // Hier möchte ich vorhandene Typen einschränken
 type SuccessResponse = Omit<ServerResponse, 'errorCodes'>; // Hier wurde die Eigenschaft "errorCodes" aus ServerResponse mit "Omnit" entfernt
 type FailureResponse = Omit<ServerResponse, 'html'>; // Hier wurde die Eigenschaft "html" aus ServerResponse mit "Omnit" entfernt
+
+
+
+// Parameter oder Rückgabe von Funktions-Typen extrahieren (zum Absichern der Parameter und Rückgabewerte einer benutzten Funktion)
+export function FuncTypeExtr() {
+
+  function calculate(price: number, vat: number) {
+    return price * vat;
+  }
+
+  // Extrahieren von Result und Parameter aus der Funktion calculate
+  type ResultOfCalculate = ReturnType<typeof calculate>
+  type ParamaterOfCalculate = Parameters<typeof calculate>
+
+  // Absichern der Variablen-Werte durch die Typen ResultOfCalculate und ParameterOfCalculate
+  const mwst: ParamaterOfCalculate[1] = 1.19; // Parameter werden hier durch ParameterOfCalculate abgesichert (2 Parameter können durch Indexing [1] seperat angesteuert werden)
+  const myPrice: ResultOfCalculate = calculate(100, mwst); // Rückgabewert wird hier durch ResultOfCalculate abgesichert
+
+}
+
+
+// Zugriff auf Typen innerhalb von Objekten (Typen): Type Indexing
+type ServerResponse2 = {
+  data: string;
+  errorCode: "NOT_FOUND" | "INTERNAL_ERROR";
+}
+
+export function TypeIndexing() {
+
+  type MyArrayType = [number, string, boolean];
+
+  type NewServerResponse = {
+    jsonData: string;
+    errorCode: ServerResponse2['errorCode']; // Zugriff über Indexing von ServerResponse2 (hier auf Objekt, dadurch ['xxx'])
+    someArray: MyArrayType[2] // Zugriff über Indexing von MyArrayType (hier auf Position, dadurch [2])
+  }
+
+}
+
+
+// Type Casting
+type Person1 = { name: string };
+type Animal1 = { name: string, animal: string };
+
+export function typeCasting() {
+
+  let personOrAnimal: Person1 | Animal1 = {
+    name: "Hansi",
+    animal: "Wellensittich",
+  }
+
+  const getPersonOrAnimal: () => Person1 | Animal1 = () => {
+    return {
+      name: "Hansi",
+      animal: "Wellensittich",
+    }
+  }
+
+  let personOrAnimal2 = getPersonOrAnimal() as Animal1; // wenn Daten-Typen/Objekt-Typen sich gleichen, dann kann man mit "as" den genauen Typen bestimmen/ableiten
+}
+
+
+// Komplexe Typenableitung CHALLENGE (die ComplexFunction soweit auseinandernehmen, bis nur noch {courseName: string} übrig bleibt)
+const ComplexFunction = () => {
+  return () => {
+    return [2, { courseName: "TypeScript" }];
+  };
+};
+
+export function TypeIndexChallenge() {
+
+  type ComplexFunctionType = typeof ComplexFunction;
+
+  type myReturnType1 = ReturnType<ComplexFunctionType>;
+  type myReturnType2 = ReturnType<myReturnType1>;
+  type myReturnType3 = Exclude<myReturnType2[number], number>;
+
+  type ReturnedObjectType = myReturnType3; // myReturnType3 bzw. ReturnedObjectTyp enthält nur noch {courseName: string}
+
+
+}
