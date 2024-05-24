@@ -99,7 +99,7 @@ let comtIntercType: myInt & myType = {
   location: "Hannover"
 }
 
-console.log(comtIntercType.name + " ist: " + comtIntercType.num + " und wohnt in " + comtIntercType.location);
+//console.log(comtIntercType.name + " ist: " + comtIntercType.num + " und wohnt in " + comtIntercType.location);
 
 
 interface myFunc {
@@ -117,7 +117,7 @@ type valTypeComb = `${valType1}_${valType2}`;
 
 let myTypeComb: valTypeComb = "ID_123_HUB_2";
 
-console.log(myTypeComb);
+//console.log(myTypeComb);
 
 type fixedObj2 = "MALE" | "FEMALE" | "DIV";
 
@@ -133,6 +133,24 @@ let obj1: myObj = {
   id: 234,
   sonst: "FEMALE",
 }
+
+
+interface saveFunction {
+  (parA: string, parB: boolean): { a: string, b?: boolean }
+}
+
+const myTestFunc: saveFunction = (pA, pB) => {
+  return {
+    a: pA,
+    b: pB
+  }
+}
+
+type onlyResult = ReturnType<saveFunction>;
+type onlyParameters = Parameters<saveFunction>;
+type onlyOne = onlyResult['b'];
+
+
 
 
 

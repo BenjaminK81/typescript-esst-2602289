@@ -559,5 +559,43 @@ export function TypeIndexChallenge() {
 
   type ReturnedObjectType = myReturnType3; // myReturnType3 bzw. ReturnedObjectTyp enthält nur noch {courseName: string}
 
+}
 
+
+// Generische Key-Value-Paare als Objekt (Record)
+export function keyValObj() {
+
+  type Product = {
+    productName: string;
+    price: number;
+    details: Record<string, string | number>; // mit Record kann ich allg. Objekt-Infos zu Key und Value angeben, ohne bestimmte Werte vorzudefinieren
+    // 1 Wert von Record ist KEY
+    // 2 Wert von Record ist VALUE
+    // definiert ein Objekt-Template, wie KEY und VALUE aussehen müssen
+  }
+
+  const p: Product = {
+    productName: "Auto",
+    price: 10000.00,
+    details: {
+      color: "Blau",
+      tueren: 4
+    }
+  }
+}
+
+
+// Eigenen Generic-Type definieren, wie Record, Exclude oder Omit etc.
+// Generic-Type funktioniert ähnlich wie eine Funktion
+export function ownGenericFunction() {
+
+  type PossibleTypes = "BUS" | "CAR";
+
+  type VehicleGenericType<VehicleType extends PossibleTypes> = `ID_${VehicleType}_${number}`; // Eigener Generic "VehicleType" enthält eine Auswahl von "PossibleTypes"
+
+  type busType = VehicleGenericType<"BUS">; // Eigener GENERIC "VehicleGenericType" von <"BUS">
+  type carType = VehicleGenericType<"CAR">; // Eigener GENERIC "VehicleGenericType" von <"CAR">
+
+  const busId: busType = "ID_BUS_5";
+  const carID: carType = "ID_CAR_42";
 }
