@@ -599,3 +599,58 @@ export function ownGenericFunction() {
   const busId: busType = "ID_BUS_5";
   const carID: carType = "ID_CAR_42";
 }
+
+
+// Generic Object-Type (Generic innerhalb von Objekten nutzen)
+export function genObjType() {
+
+  // Object-Type mit generischem Inhalt (Details)
+  type Product<Details> = {
+    name: string;
+    details: Details;
+    //details: Record<string, string | number> // wenn ich den Inhalt vorher nicht weiß!
+  }
+
+  // Eigener Generic Type, der im oberen Objekt anstelle von details genutzt wird
+  // Wenn ich z.B. weiß, welche Inhalte das Objekt "details" beinhaltet
+  type FoodProduct = Product<{
+    weight: number;
+    origin: string;
+  }>;
+
+  const f: FoodProduct = {
+    name: "Tomate",
+    details: {
+      weight: 0.2,
+      origin: "Spain"
+    }
+  }
+}
+
+
+// Generic Function-Type Challenge
+
+type nameType = { // nameType sichert die Properties ab (als Erweiterung unter InputParam) und muss enthalten sein 
+  name: string;
+}
+
+const myFunction = <InputParam extends nameType>(myFuncParam: InputParam): InputParam => { // In Generic Functions werden die Generics vor den Klammern geschrieben
+  return;
+}
+
+export function GenTypeChallenge() {
+
+  const obj = myFunction({
+    name: "Martha",
+    lastname: "Collins",
+    age: 42,
+  });
+
+  const falseObject = myFunction({
+    noName: "Nope"
+  })
+
+  console.log(obj);
+
+}
+GenTypeChallenge();
