@@ -653,4 +653,60 @@ export function GenTypeChallenge() {
   console.log(obj);
 
 }
-GenTypeChallenge();
+
+// Imports und Module
+// Mit einer *.d.ts Datei können wieder Typisierungen für bestehendes JS abgesichert werden (siehe func.d.ts Datei)
+// wenn man fremden JS-Code importiert 
+//import { calculate } from "./func";
+
+import * as Product from "./func";
+
+declare module "./func" {
+  export function getUrl(): string;
+}
+
+export function impFunc() {
+  const apiUrl = Product.PRODUCT_URL; // Hier wird die Konstante PRODUCT_URL aus der importierten Datei func.js über Product abgerufen
+
+  Product.getUrl(); // möchte ich eine Erweiterung importieren die beim Import z.B. einer Libary in TS nicht erkannt wird, dann kann man diese deklarieren (siehe declare) 
+  // declare kann aber auch zu Fehlern führen, da ich TS sage "vertrau dieser Anweisung"
+}
+
+
+// Namespace 
+//(veraltet, da man auch direkt Objekte benutzen kann) (siehe namespace.ts)
+import { ColorVars } from "./namespace";
+console.log(`${ColorVars.color} und ${ColorVars.name}`);
+
+// einfach mit Object-Import (siehe namespace.ts)
+import * as ColorVarsObj from "./namespace";
+console.log(`${ColorVarsObj.colorAsObj} und ${ColorVarsObj.nameAsObj}`);
+
+
+
+// References
+// mit References können wir TS sagen, wo wir *.d.ts Dateien finden können, wenn wir die genaue Verzeichnis-Struktur nicht wissen
+
+//Beispiel
+/// <reference path="../x09_04/func.d.ts" />
+import { calculate } from "./hidden/func";
+
+export function refFunc() {
+  calculate(2, 2);
+}
+
+
+// Import und Export von Types
+//import { Hello, MyObject } from "./types"; // funktioniert für Type-Import und alle anderen wie Function, Konstante, Objekte usw.
+import type { Hello, MyObject } from "./types"; // sicherer ist es, wenn man bei Type-Import "type" verwendet, da der bundler sich nur auf Types konzentriert (exportiert) und nicht fälschlicher Weise JS
+
+export function typeFunc() {
+  const myHello: Hello = "hallo";
+  const myNewObj: MyObject = {
+    foo: "Bla"
+  }
+}
+
+
+// Wenn man ein Package installiert und TypeScript beschwert sich, dass zu diesem Package keine types definiert sind,
+// dann kann man diese nachträglich unter: www.typescriptlang.org/dt/search zu diesem Package installieren

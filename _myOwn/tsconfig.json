@@ -4,6 +4,6 @@
         "module": "ESNext",
     },
     "include": [
-        "**/*.ts"
+        "*.ts"
     ],
 }
